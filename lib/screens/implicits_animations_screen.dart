@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class ImplicitAnimationsScreen extends StatefulWidget {
   const ImplicitAnimationsScreen({super.key});
@@ -11,8 +9,45 @@ class ImplicitAnimationsScreen extends StatefulWidget {
 }
 
 class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
+  bool _visible = true;
+
+  void _trigger() {
+    setState(() {
+      _visible = !_visible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Implicit Animation"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _visible ? 1 : 0,
+              child: Container(
+                width: size.width * 0.8,
+                height: size.width * 0.8,
+                color: Colors.amber,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: _trigger,
+              child: const Text("Go!"),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
