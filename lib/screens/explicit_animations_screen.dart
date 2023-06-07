@@ -37,10 +37,13 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "${_animationController.value}",
-              style: const TextStyle(
-                fontSize: 58,
+            AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) => Text(
+                "${_animationController.value}",
+                style: const TextStyle(
+                  fontSize: 58,
+                ),
               ),
             ),
             Row(
