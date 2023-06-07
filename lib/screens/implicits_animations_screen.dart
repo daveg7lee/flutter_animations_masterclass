@@ -29,16 +29,20 @@ class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedContainer(
-              curve: Curves.elasticOut,
-              duration: const Duration(seconds: 1),
-              width: size.width * 0.8,
-              height: size.width * 0.8,
-              transform: Matrix4.rotationZ(_visible ? 1 : 0),
-              transformAlignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: _visible ? Colors.red : Colors.amber,
-                borderRadius: BorderRadius.circular(_visible ? 100 : 0),
+            TweenAnimationBuilder(
+              tween: Tween(begin: 10.0, end: 20.0),
+              duration: const Duration(seconds: 10),
+              builder: (context, value, child) => AnimatedContainer(
+                curve: Curves.elasticOut,
+                duration: const Duration(seconds: 1),
+                width: size.width * 0.8,
+                height: size.width * 0.8,
+                transform: Matrix4.rotationZ(_visible ? 1 : 0),
+                transformAlignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: _visible ? Colors.red : Colors.amber,
+                  borderRadius: BorderRadius.circular(_visible ? 100 : 0),
+                ),
               ),
             ),
             const SizedBox(
