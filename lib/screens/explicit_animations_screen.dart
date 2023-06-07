@@ -13,7 +13,9 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1500),
-  );
+  )..addListener(() {
+      _value.value = _animationController.value;
+    });
 
   late final Animation<Decoration> _decoration = DecorationTween(
     begin: BoxDecoration(
@@ -53,6 +55,13 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  final ValueNotifier<double> _value = ValueNotifier(0.0);
+
+  void _onChanged(double value) {
+    _value.value = 0;
+    _animationController.value = value;
   }
 
   @override
@@ -97,6 +106,14 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
                   child: const Text("Rewind"),
                 )
               ],
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            ValueListenableBuilder(
+              valueListenable: _value,
+              builder: (context, value, child) =>
+                  Slider(value: _value.value, onChanged: _onChanged),
             )
           ],
         ),
