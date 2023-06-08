@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class AppleWatchScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _AppleWatchScreenState extends State<AppleWatchScreen> {
       body: Center(
           child: CustomPaint(
         painter: AppleWatchPainter(),
-        size: const Size(200, 200),
+        size: const Size(400, 400),
       )),
     );
   }
@@ -29,19 +31,49 @@ class _AppleWatchScreenState extends State<AppleWatchScreen> {
 class AppleWatchPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final center = Offset(size.width / 2, size.height / 2);
 
-    final paint = Paint()..color = Colors.blue;
+    final redCircleRadius = (size.width / 2) * 0.9;
 
-    canvas.drawRect(rect, paint);
-
-    final circlePaint = Paint()
-      ..color = Colors.red
+    final redCirclePaint = Paint()
+      ..color = Colors.red.shade400.withOpacity(0.3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10;
+      ..strokeWidth = 25;
 
-    canvas.drawCircle(
-        Offset(size.width / 2, size.width / 2), size.width / 2, circlePaint);
+    canvas.drawCircle(center, redCircleRadius, redCirclePaint);
+
+    final greenCirclePain = Paint()
+      ..color = Colors.green.shade400.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25;
+
+    canvas.drawCircle(center, (size.width / 2) * 0.76, greenCirclePain);
+
+    final blueCirclePain = Paint()
+      ..color = Colors.cyan.shade400.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25;
+
+    canvas.drawCircle(center, (size.width / 2) * 0.62, blueCirclePain);
+
+    final redArcRect = Rect.fromCircle(
+      center: center,
+      radius: redCircleRadius,
+    );
+
+    final redArcPaint = Paint()
+      ..color = Colors.red.shade400
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawArc(
+      redArcRect,
+      -0.5 * pi,
+      1.5 * pi,
+      false,
+      redArcPaint,
+    );
   }
 
   @override
