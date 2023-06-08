@@ -19,15 +19,34 @@ class _AppleWatchScreenState extends State<AppleWatchScreen>
   late final CurvedAnimation _curve =
       CurvedAnimation(parent: _animationController, curve: Curves.bounceOut);
 
-  late Animation<double> _progress =
-      Tween(begin: 0.003, end: 1.5).animate(_curve);
+  List<double> _getRandomValueList({int count = 3}) {
+    return List.generate(count, (_) => Random().nextDouble() * 2.0 * pi);
+  }
+
+  late final List<double> _initProgressPoints = _getRandomValueList();
+
+  late final List<Animation<double>> _progressList = List.generate(
+    3,
+    (index) => Tween(
+      begin: 0 * pi,
+      end: _initProgressPoints[index],
+    ).animate(_curve),
+  );
 
   void _animateValues() {
-    final newBegin = _progress.value;
-    final random = Random();
-    final newEnd = random.nextDouble() * 2.0;
+    final newBeginPoints = _progressList //
+        .map((e) => e.value)
+        .toList();
+    final newEndPoints = _getRandomValueList();
+
+    _progressList.asMap().forEach((idx, _) {
+      _progressList[idx] = Tween(
+        begin: newBeginPoints[idx],
+        end: newEndPoints[idx],
+      ).animate(_curve);
+    });
+
     setState(() {
-      _progress = Tween(begin: newBegin, end: newEnd).animate(_curve);
       _animationController.forward(from: 0);
     });
   }
@@ -49,9 +68,11 @@ class _AppleWatchScreenState extends State<AppleWatchScreen>
       ),
       body: Center(
         child: AnimatedBuilder(
-          animation: _progress,
+          animation: _progressList[0],
           builder: (context, child) => CustomPaint(
-            painter: AppleWatchPainter(progress: _progress.value),
+            painter: AppleWatchPainter(
+              progressList: _progressList.map((e) => e.value).toList(),
+            ),
             size: const Size(400, 400),
           ),
         ),
@@ -65,11 +86,9 @@ class _AppleWatchScreenState extends State<AppleWatchScreen>
 }
 
 class AppleWatchPainter extends CustomPainter {
-  final double progress;
+  final List<double> progressList;
 
-  AppleWatchPainter({
-    required this.progress,
-  });
+  AppleWatchPainter({required this.progressList});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -114,7 +133,7 @@ class AppleWatchPainter extends CustomPainter {
     canvas.drawArc(
       redArcRect,
       startingAngle,
-      progress * pi,
+      progressList[0],
       false,
       redArcPaint,
     );
@@ -133,7 +152,7 @@ class AppleWatchPainter extends CustomPainter {
     canvas.drawArc(
       greenArcRect,
       startingAngle,
-      progress * pi,
+      progressList[1],
       false,
       greenArcPaint,
     );
@@ -152,7 +171,7 @@ class AppleWatchPainter extends CustomPainter {
     canvas.drawArc(
       blueArcRect,
       startingAngle,
-      progress * pi,
+      progressList[2],
       false,
       blueArcPaint,
     );
@@ -160,6 +179,8 @@ class AppleWatchPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant AppleWatchPainter oldDelegate) {
-    return oldDelegate.progress != progress;
+    return oldDelegate.progressList[0] != progressList[0] ||
+        oldDelegate.progressList[1] != progressList[1] ||
+        oldDelegate.progressList[2] != progressList[2];
   }
 }
