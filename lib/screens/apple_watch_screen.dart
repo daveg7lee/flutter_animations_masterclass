@@ -9,7 +9,19 @@ class AppleWatchScreen extends StatefulWidget {
   State<AppleWatchScreen> createState() => _AppleWatchScreenState();
 }
 
-class _AppleWatchScreenState extends State<AppleWatchScreen> {
+class _AppleWatchScreenState extends State<AppleWatchScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 800),
+    lowerBound: 0.005,
+    upperBound: 2.0,
+  );
+
+  void _animateValues() {
+    _animationController.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,20 +32,36 @@ class _AppleWatchScreenState extends State<AppleWatchScreen> {
         title: const Text("Apple Watch"),
       ),
       body: Center(
-          child: CustomPaint(
-        painter: AppleWatchPainter(),
-        size: const Size(400, 400),
-      )),
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) => CustomPaint(
+            painter: AppleWatchPainter(progress: _animationController.value),
+            size: const Size(400, 400),
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _animateValues,
+        child: const Icon(Icons.refresh),
+      ),
     );
   }
 }
 
 class AppleWatchPainter extends CustomPainter {
+  final double progress;
+
+  AppleWatchPainter({
+    required this.progress,
+  });
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-
     final redCircleRadius = (size.width / 2) * 0.9;
+    final greenCircleRadius = (size.width / 2) * 0.76;
+    final blueCircleRadius = (size.width / 2) * 0.62;
+    const startingAngle = -0.5 * pi;
 
     final redCirclePaint = Paint()
       ..color = Colors.red.shade400.withOpacity(0.3)
@@ -47,14 +75,14 @@ class AppleWatchPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 25;
 
-    canvas.drawCircle(center, (size.width / 2) * 0.76, greenCirclePain);
+    canvas.drawCircle(center, greenCircleRadius, greenCirclePain);
 
     final blueCirclePain = Paint()
       ..color = Colors.cyan.shade400.withOpacity(0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 25;
 
-    canvas.drawCircle(center, (size.width / 2) * 0.62, blueCirclePain);
+    canvas.drawCircle(center, blueCircleRadius, blueCirclePain);
 
     final redArcRect = Rect.fromCircle(
       center: center,
@@ -69,15 +97,53 @@ class AppleWatchPainter extends CustomPainter {
 
     canvas.drawArc(
       redArcRect,
-      -0.5 * pi,
-      1.5 * pi,
+      startingAngle,
+      progress * pi,
       false,
       redArcPaint,
+    );
+
+    final greenArcRect = Rect.fromCircle(
+      center: center,
+      radius: greenCircleRadius,
+    );
+
+    final greenArcPaint = Paint()
+      ..color = Colors.green.shade400
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawArc(
+      greenArcRect,
+      startingAngle,
+      progress * pi,
+      false,
+      greenArcPaint,
+    );
+
+    final blueArcRect = Rect.fromCircle(
+      center: center,
+      radius: blueCircleRadius,
+    );
+
+    final blueArcPaint = Paint()
+      ..color = Colors.cyan.shade400
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawArc(
+      blueArcRect,
+      startingAngle,
+      progress * pi,
+      false,
+      blueArcPaint,
     );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(covariant AppleWatchPainter oldDelegate) {
+    return oldDelegate.progress != progress;
   }
 }
