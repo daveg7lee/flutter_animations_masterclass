@@ -13,13 +13,29 @@ class _AppleWatchScreenState extends State<AppleWatchScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 800),
-    lowerBound: 0.005,
-    upperBound: 2.0,
-  );
+    duration: const Duration(milliseconds: 1000),
+  )..forward();
+
+  late final CurvedAnimation _curve =
+      CurvedAnimation(parent: _animationController, curve: Curves.bounceOut);
+
+  late Animation<double> _progress =
+      Tween(begin: 0.003, end: 1.5).animate(_curve);
 
   void _animateValues() {
-    _animationController.forward();
+    final newBegin = _progress.value;
+    final random = Random();
+    final newEnd = random.nextDouble() * 2.0;
+    setState(() {
+      _progress = Tween(begin: newBegin, end: newEnd).animate(_curve);
+      _animationController.forward(from: 0);
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -33,9 +49,9 @@ class _AppleWatchScreenState extends State<AppleWatchScreen>
       ),
       body: Center(
         child: AnimatedBuilder(
-          animation: _animationController,
+          animation: _progress,
           builder: (context, child) => CustomPaint(
-            painter: AppleWatchPainter(progress: _animationController.value),
+            painter: AppleWatchPainter(progress: _progress.value),
             size: const Size(400, 400),
           ),
         ),
