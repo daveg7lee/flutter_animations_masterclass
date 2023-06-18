@@ -122,60 +122,60 @@ class _SwipingCardsScreenState extends State<SwipingCardsScreen>
                 ),
               ),
               Positioned(
-                  bottom: 100,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () =>
-                            _dismissCard(forward: false, duration: 200),
-                        child: Transform.scale(
-                          scale: _position.value.isNegative ? buttonScale : 1.0,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: _position.value.isNegative
-                                  ? buttonColor
-                                  : Colors.amber,
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                  color: Colors.grey.shade400, width: 2),
-                            ),
-                            width: 80,
-                            height: 80,
-                            child: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 35,
-                            ),
+                bottom: 100,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => _dismissCard(forward: false, duration: 200),
+                      child: Transform.scale(
+                        scale: _position.value.isNegative ? buttonScale : 1.0,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: _position.value.isNegative
+                                ? buttonColor
+                                : Colors.amber,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                color: Colors.grey.shade400, width: 2),
+                          ),
+                          width: 80,
+                          height: 80,
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 35,
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () => _dismissCard(forward: true, duration: 200),
-                        child: Transform.scale(
-                          scale: _position.value.isNegative ? 1.0 : buttonScale,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: _position.value.isNegative
-                                  ? Colors.amber
-                                  : buttonColor,
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                  color: Colors.grey.shade400, width: 2),
-                            ),
-                            width: 80,
-                            height: 80,
-                            child: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 35,
-                            ),
+                    ),
+                    GestureDetector(
+                      onTap: () => _dismissCard(forward: true, duration: 200),
+                      child: Transform.scale(
+                        scale: _position.value.isNegative ? 1.0 : buttonScale,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: _position.value.isNegative
+                                ? Colors.amber
+                                : buttonColor,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                color: Colors.grey.shade400, width: 2),
+                          ),
+                          width: 80,
+                          height: 80,
+                          child: const Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 35,
                           ),
                         ),
-                      )
-                    ],
-                  ))
+                      ),
+                    )
+                  ],
+                ),
+              )
             ],
           );
         },

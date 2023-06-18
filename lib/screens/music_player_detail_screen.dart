@@ -11,15 +11,26 @@ class MusicPlayerDetailScreen extends StatefulWidget {
 }
 
 class _MusicPlayerDetailScreenState extends State<MusicPlayerDetailScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _progressController = AnimationController(
     vsync: this,
     duration: const Duration(minutes: 1),
   )..repeat(reverse: true);
 
+  late final AnimationController _marqueeController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 20),
+  )..repeat(reverse: true);
+
+  late final Animation<Offset> _marqueeTween = Tween(
+    begin: const Offset(0.1, 0),
+    end: const Offset(-0.6, 0),
+  ).animate(_marqueeController);
+
   @override
   void dispose() {
     _progressController.dispose();
+    _marqueeController.dispose();
     super.dispose();
   }
 
@@ -74,6 +85,56 @@ class _MusicPlayerDetailScreenState extends State<MusicPlayerDetailScreen>
                 ),
               );
             },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Row(
+              children: [
+                Text(
+                  "00:00",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  "01:00",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Top Gun",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          SlideTransition(
+            position: _marqueeTween,
+            child: const Text(
+              "A Film By Christopher Nolan - Original Motion Picture Soundtrack",
+              style: TextStyle(fontSize: 18),
+              maxLines: 1,
+              softWrap: true,
+              overflow: TextOverflow.visible,
+            ),
           )
         ],
       ),
