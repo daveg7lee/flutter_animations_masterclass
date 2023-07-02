@@ -35,20 +35,15 @@ class _RiveScreenState extends State<RiveScreen> {
         title: const Text("Rive"),
       ),
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 400,
-              width: double.infinity,
-              child: RiveAnimation.asset(
-                "assets/animations/old-man-animation.riv",
-                artboard: "Dwarf Panel",
-                stateMachines: const ['State Machine 1'],
-                onInit: _onInit,
-              ),
-            ),
-            ElevatedButton(onPressed: _togglePanel, child: const Text("Go!"))
-          ],
+        child: Container(
+          color: const Color.fromRGBO(85, 84, 203, 1),
+          width: double.infinity,
+          child: RiveAnimation.asset(
+            "assets/animations/stars-animation.riv",
+            artboard: "New Artboard",
+            stateMachines: const ['State Machine 1'],
+            onInit: _onInit,
+          ),
         ),
       ),
     );
